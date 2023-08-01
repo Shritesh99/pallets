@@ -57,7 +57,14 @@ fn setup_logger() {
             let msg = b"Hello world".to_vec();
             let hash = b"82f855acdbd9afcc6bf84b5ebd46a5c22863c292b351c3f2e1bcb15a36df19ca".to_vec();
 
-            assert_ok!(Prover::gen_proof(origin, tx_id, chain_id_a.clone(), chain_id_b.clone(), msg, hash));
+            assert_ok!(Prover::gen_proof(origin, tx_id.clone(), chain_id_a.clone(), chain_id_b.clone(), msg.clone(), hash.clone()));
+
+            if let Some(result) = Prover::get_proof(&tx_id){
+                assert_eq!(result.tx_id, tx_id);
+                assert_eq!(result.chain_id_a, chain_id_a);
+                assert_eq!(result.chain_id_b, chain_id_b);
+                assert_eq!(result.hash, hash.clone());
+            }
         });
     }
 

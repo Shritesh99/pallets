@@ -27,13 +27,13 @@ pub mod pallet {
 	// ref: https://serde.rs/container-attrs.html#crate
 	#[derive(Encode, Decode, Default, RuntimeDebug, scale_info::TypeInfo)]
 	pub struct RequestData<AccountId>  {
-		tx_id: Vec<u8>,
-		chain_id_a: Vec<u8>,
-		chain_id_b: Vec<u8>,
-		msg: Vec<u8>,
-		hash: Vec<u8>,
-		proof: Vec<u8>,
-		from: AccountId
+		pub tx_id: Vec<u8>,
+		pub chain_id_a: Vec<u8>,
+		pub chain_id_b: Vec<u8>,
+		pub msg: Vec<u8>,
+		pub hash: Vec<u8>,
+		pub proof: Vec<u8>,
+		pub from: AccountId
 	}
 
 	#[derive(Encode, Decode, Default, RuntimeDebug, scale_info::TypeInfo)]
