@@ -113,15 +113,6 @@ pub mod pallet {
 				hash: Vec<u8>
 			) -> DispatchResult {
 
-				// // List all the files in the current directory
-				// println!("Files in the current directory:");
-				// for entry in fs::read_dir(current_dir)? {
-				// 	let entry = entry?;
-				// 	let path = entry.path();
-				// 	println!("{:?}", path);
-				// }
-
-				let who = ensure_signed(origin)?;
 				//TODO: Construct argument
 				let chain_a = <ChainDataStore<T>>::get(&chain_id_a).ok_or(Error::<T>::ChainNotExist)?;
 				let chain_b = <ChainDataStore<T>>::get(&chain_id_b).ok_or(Error::<T>::ChainNotExist)?;
@@ -188,7 +179,7 @@ pub mod pallet {
 				let msg_part3 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part3) % &field_max;
 				let msg_part4 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part4) % &field_max;
 
-				let hash_bytes = match hex::decode(hash) {
+				let hash_bytes = match hex::decode(&hash) {
 					Ok(hash)=>hash,
 					Err(err)=>{
 						log::error!("Hash Parsing Error: {}", err);
@@ -275,7 +266,19 @@ pub mod pallet {
 						return Err(Error::<T>::ProofGenFailedError.into())
 					},
 				}
-				Self::deposit_event(Event::GeneratedProof{who, tx_id: tx_id, proof: contents.into_bytes()});
+
+				let sender = ensure_signed(origin)?;
+				let request_data = RequestData {
+					from: sender.clone(),
+					tx_id: tx_id.clone(),
+					chain_id_a: chain_id_a.clone(),
+					chain_id_b: chain_id_b.clone(),
+					msg: msg.clone(),
+					hash: hash.clone(),
+					proof: contents.clone().into_bytes(),
+				};
+				<RequestStore<T>>::insert(&tx_id, &request_data);
+				Self::deposit_event(Event::GeneratedProof{who: sender, tx_id: tx_id, proof: contents.into_bytes()});
 				Ok(())
 		}
 	}
