@@ -3,7 +3,6 @@
 use num_bigint::{BigInt, Sign};
 use num_traits::Pow;
 pub use pallet::*;
-use hex;
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -179,7 +178,7 @@ pub mod pallet {
 				let msg_part3 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part3) % &field_max;
 				let msg_part4 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part4) % &field_max;
 
-				let hash_bytes = match hex::decode(&hash) {
+				let hash_bytes = match decode_hex(hash.clone()) {
 					Ok(hash)=>hash,
 					Err(err)=>{
 						log::error!("Hash Parsing Error: {}", err);
@@ -282,9 +281,20 @@ pub mod pallet {
 				Ok(())
 		}
 	}
+	fn decode_hex(hex_vec: Vec<u8>) -> Result<Vec<u8>, std::num::ParseIntError> {
+		let hex_string = String::from_utf8(hex_vec).unwrap();
+		let mut bytes = Vec::new();
 
+		for i in 0..(hex_string.len() / 2) {
+			let res = u8::from_str_radix(&hex_string[i * 2..i * 2 + 2], 16)?;
+			bytes.push(res);
+		}
+
+		Ok(bytes)
+	}
 }
 
+mod benchmarking;
 #[cfg(test)]
 mod mock;
 #[cfg(test)]

@@ -64,6 +64,7 @@ fn setup_logger() {
                 assert_eq!(result.chain_id_a, chain_id_a);
                 assert_eq!(result.chain_id_b, chain_id_b);
                 assert_eq!(result.hash, hash.clone());
+                println!("{}",String::from_utf8(result.proof).expect("Invalid UTF-8 sequence"));
             }
         });
     }
