@@ -1,8 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-#[cfg(all(not(feature = "std"), feature = "sgx"))]
-#[macro_use]
-extern crate sgx_tstd as std;
 
 use num_bigint::{BigInt, Sign};
 pub use pallet::*;
@@ -16,8 +13,9 @@ pub mod pallet {
 	use frame_support::pallet_prelude::{*, DispatchResult};
 	use frame_system::pallet_prelude::*;
 	
-	#[cfg(all(not(feature = "std"), feature = "sgx"))]
-	use std::vec::Vec;
+	use sp_std::vec::Vec;
+	use sp_std::prelude::*;
+	use sp_std::str;
 	use std::process::Command;
 	use std::fs;
 	use std::fs::File;
@@ -122,21 +120,21 @@ pub mod pallet {
 				let chain_a = <ChainDataStore<T>>::get(&chain_id_a).ok_or(Error::<T>::ChainNotExist)?;
 				let chain_b = <ChainDataStore<T>>::get(&chain_id_b).ok_or(Error::<T>::ChainNotExist)?;
 
-				let pub_key_x_a = match std::str::from_utf8(&chain_a.pub_key_x){
+				let pub_key_x_a = match str::from_utf8(&chain_a.pub_key_x){
 					Ok(key) => key,
 					Err(err) => {
 						log::error!("{}", err);
 						return Err(Error::<T>::KeysParseError.into())
 					},
 				};
-				let pub_key_y_a = match std::str::from_utf8(&chain_a.pub_key_y){
+				let pub_key_y_a = match str::from_utf8(&chain_a.pub_key_y){
 					Ok(key) => key,
 					Err(err) => {
 						log::error!("{}", err);
 						return Err(Error::<T>::KeysParseError.into())
 					},
 				};
-				let s_key_a = match std::str::from_utf8(&chain_a.s_key){
+				let s_key_a = match str::from_utf8(&chain_a.s_key){
 					Ok(key) => key,
 					Err(err) => {
 						log::error!("{}", err);
@@ -144,21 +142,21 @@ pub mod pallet {
 					},
 				};
 
-				let pub_key_x_b = match std::str::from_utf8(&chain_b.pub_key_x){
+				let pub_key_x_b = match str::from_utf8(&chain_b.pub_key_x){
 					Ok(key) => key,
 					Err(err) => {
 						log::error!("{}", err);
 						return Err(Error::<T>::KeysParseError.into())
 					},
 				};
-				let pub_key_y_b = match std::str::from_utf8(&chain_b.pub_key_y){
+				let pub_key_y_b = match str::from_utf8(&chain_b.pub_key_y){
 					Ok(key) => key,
 					Err(err) => {
 						log::error!("{}", err);
 						return Err(Error::<T>::KeysParseError.into())
 					},
 				};
-				let s_key_b = match std::str::from_utf8(&chain_b.s_key){
+				let s_key_b = match str::from_utf8(&chain_b.s_key){
 					Ok(key) => key,
 					Err(err) => {
 						log::error!("{}", err);
