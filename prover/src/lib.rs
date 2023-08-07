@@ -1,5 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-extern crate num_bigint;
+
 use num_bigint::{BigInt, Sign};
 pub use pallet::*;
 
