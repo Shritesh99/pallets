@@ -1,5 +1,9 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(all(not(feature = "std"), feature = "sgx"))]
+#[macro_use]
+extern crate sgx_tstd as std;
+
 use num_bigint::{BigInt, Sign};
 pub use pallet::*;
 
@@ -11,6 +15,9 @@ pub mod pallet {
 	use codec::{Decode, Encode};
 	use frame_support::pallet_prelude::{*, DispatchResult};
 	use frame_system::pallet_prelude::*;
+	
+	#[cfg(all(not(feature = "std"), feature = "sgx"))]
+	use std::vec::Vec;
 	use std::process::Command;
 	use std::fs;
 	use std::fs::File;
