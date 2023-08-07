@@ -1,7 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
-
+extern crate num_bigint;
 use num_bigint::{BigInt, Sign};
-use num_traits::Pow;
 pub use pallet::*;
 
 #[frame_support::pallet]
@@ -172,7 +171,7 @@ pub mod pallet {
 				let part3 = &msg[2 * quarter..3 * quarter];
 				let part4 = &msg[3 * quarter..];
 
-				let field_max = BigInt::from(2).pow(254_u32);
+				let field_max = BigInt::from(1) << 254;
 				let msg_part1 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part1) % &field_max;
 				let msg_part2 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part2) % &field_max;
 				let msg_part3 = BigInt::from_bytes_be(num_bigint::Sign::Plus, part3) % &field_max;

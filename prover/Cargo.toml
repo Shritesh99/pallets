@@ -19,7 +19,6 @@ sp-arithmetic = { default-features = false, git = "https://github.com/paritytech
 
 test-utils = { path = "../test-utils", default-features = false, optional = true }
 num-bigint = { tag = "sgx_1.1.3", git = "https://github.com/mesalock-linux/num-bigint-sgx" }
-num-traits = { tag = "sgx_1.1.3", git = "https://github.com/mesalock-linux/num-traits-sgx" }
 
 [dev-dependencies]
 test-utils = { path = "../test-utils" }
